@@ -1,6 +1,8 @@
+function $$(id) { return document.getElementById(id); }
+function $val(id) { return document.getElementById(id).value; }
+
 const FPS = 60;
 const dotSize = 1;
-
 
 function rotateX([x, y, z], angle) {
     return [
@@ -27,12 +29,12 @@ function rotateY([x, y, z], angle) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    var cnv = document.getElementById("scene");
+    var cnv = $$("scene");
     var ctx = cnv.getContext('2d');
 
-    let cam_x = parseFloat(document.getElementById('x').value)
-    let cam_y = parseFloat(document.getElementById('y').value)
-    let cam_z = parseFloat(document.getElementById('z').value)
+    let cam_x = parseFloat($val('x'))
+    let cam_y = parseFloat($val('y'))
+    let cam_z = parseFloat($val('z'))
 
     function project(p) {
         [x,y,z] = p;
@@ -64,9 +66,9 @@ document.addEventListener('DOMContentLoaded', function () {
     function draw() {
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, cnv.width, cnv.height)
-        cam_x = parseFloat(document.getElementById('x').value)
-        cam_y = parseFloat(document.getElementById('y').value)
-        cam_z = parseFloat(document.getElementById('z').value)
+        cam_x = parseFloat($val('x'))
+        cam_y = parseFloat($val('y'))
+        cam_z = parseFloat($val('z'))
 
         for (let i = 0; i < points.length; i++) {
             drawPoint(points[i]);
