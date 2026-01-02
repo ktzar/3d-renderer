@@ -1,18 +1,44 @@
+const FPS = 60;
+const dotSize = 1;
+
+
+function rotateX([x, y, z], angle) {
+    return [
+        x,
+        y * Math.cos(angle) - z * Math.sin(angle),
+        y * Math.sin(angle) + z * Math.cos(angle),
+    ];
+}
+
+function rotateZ([x, y, z], angle) {
+    return [
+        x * Math.cos(angle) - y * Math.sin(angle),
+        x * Math.sin(angle) + y * Math.cos(angle),
+        z
+    ];
+}
+
+function rotateY([x, y, z], angle) {
+    return [
+        x * Math.cos(angle) + z * Math.sin(angle),
+        y,
+        -x * Math.sin(angle) + z * Math.cos(angle),
+    ];
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     var cnv = document.getElementById("scene");
     var ctx = cnv.getContext('2d');
-    var x = 0;
-    const FPS = 60;
-    const dotSize = 2;
+
     let cam_x = parseFloat(document.getElementById('x').value)
     let cam_y = parseFloat(document.getElementById('y').value)
     let cam_z = parseFloat(document.getElementById('z').value)
 
     function project(p) {
         [x,y,z] = p;
-        z+= cam_z
-        y+= cam_y
-        x+= cam_x
+        z += cam_z
+        y += cam_y
+        x += cam_x
         x = cnv.width/2 * (1+x/z);
         y = cnv.height/2 * (1-y/z);
         return [x,y];
@@ -35,22 +61,6 @@ document.addEventListener('DOMContentLoaded', function () {
         ctx.stroke();
     }
 
-    function rotateZ([x, y, z], angle) {
-        return [
-            x * Math.cos(angle) - y * Math.sin(angle),
-            x * Math.sin(angle) + y * Math.cos(angle),
-            z
-        ];
-    }
-
-    function rotateY([x, y, z], angle) {
-        return [
-            x * Math.cos(angle) + z * Math.sin(angle),
-            y,
-            -x * Math.sin(angle) + z * Math.cos(angle),
-        ];
-    }
-
     function draw() {
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, cnv.width, cnv.height)
@@ -60,7 +70,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         for (let i = 0; i < points.length; i++) {
             drawPoint(points[i]);
-            points[i] = rotateY(points[i], 0.005)
+            points[i] = rotateY(points[i], 0.02)
+            points[i] = rotateZ(points[i], 0.01)
+            points[i] = rotateX(points[i], 0.01)
         }
 
         setTimeout(draw, 1000/FPS);
